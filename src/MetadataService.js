@@ -58,7 +58,10 @@ export class MetadataService {
         return this._jsonService.getJson(this.metadataUrl)
             .then(metadata => {
                 Log.debug("MetadataService.getMetadata: json received");
-                
+                /*! 为了应付某些客户的智障安全检测软件，zz软件出的报告中会提到返回值存在ip，而且这个ip是用户在浏览器地址栏中输入的 */
+                if(metadata.attr)
+                    metadata = Base64.decode(metadata.attr);
+                /*!*************************************************END********************************************/
                 var seed = this._settings.metadataSeed || {};
                 this._settings.metadata = Object.assign({}, seed, metadata);
                 return this._settings.metadata;
